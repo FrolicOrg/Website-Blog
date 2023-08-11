@@ -1,0 +1,294 @@
+---
+title: 'How to add analytics dashboard to your SaaS application'
+date: 2023-08-11T15:32:14Z
+lastmod: '2023-08-11'
+tags: ['dashboard', 'analytics', 'SaaS', 'Next.js']
+draft: false
+summary: 'A tutorial on adding customer facing dashboard for SaaS application'
+# layout: PostSimple
+bibliography: references-data.bib
+canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
+---
+
+A dashboard is a crucial component of any SaaS (Software as a Service) application, providing users with an overview of key metrics and insights in a visually appealing and easily digestible format. In this tutorial, we'll walk through the process of creating a dashboard for your SaaS application. By the end of this tuorial, you will be able to create a dashboard chart component for your customers.
+
+We will be using [Next.js](https://nextjs.org) for frontend, [MySQL](https://www.mysql.com) database and [Frolic](https://www.frolicorg.com) for creating the backend for your dashboard.
+
+## Add Visualizations to Your UI
+
+We will start by adding chart functionality to the UI. We will be using [frolic-react](https://github.com/frolicorg/frolic-react) which makes it easy to add charts to your react webpage. `frolic-react` is built on top of [recharts](https://recharts.org/en-US/), one of the most popular data visualization library for react.
+
+### Install frolic-react
+
+Install `frolic-react` by using:
+
+```bash showLineNumbers
+npm i frolic-react
+```
+
+In your `tailwind.config.js`, add the following code:
+
+```js showLineNumbers
+module.exports = {
+  content: [
+    ...
+    'node_modules/frolic-react/**/*.{js,ts,jsx,tsx}',
+  ],
+  ...
+  plugins: [
+    require('frolic-react'),
+  ],
+}
+```
+
+## Add chart to your webpage
+
+After `frolic-react` is installed, you can add the first chart to your webpage by importing `frolic-react` in your Next.JS webpage:
+
+```js {2} showLineNumbers
+'use client'
+import { Card, LineChart, BarChart } from 'frolic-react'
+
+const Page = () => {
+  return <div></div>
+}
+
+export default Page
+```
+
+Let's add sample data which will be displayed by our charts
+
+```js {5-8} showLineNumbers
+'use client'
+import { Card, LineChart, BarChart } from 'frolic-react'
+
+const Page = () => {
+  const data = [
+    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+  ]
+
+  return <div></div>
+}
+
+export default Page
+```
+
+Display the sample data using `<LineChart>` component in `frolic-react`:
+
+```js {11-15} showLineNumbers
+'use client'
+import { Card, LineChart, BarChart } from 'frolic-react'
+
+const Page = () => {
+  const data = [
+    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+  ]
+
+  return (
+    <div className="grid grid-cols-2 gap-5">
+      <Card title="Line Chart">
+        <LineChart data={data} metrics={['uv', 'pv', 'amt']} dimensions={['name']}></LineChart>
+      </Card>
+    </div>
+  )
+}
+
+export default Page
+```
+
+You should be able to see the following on your webpage:
+
+IMAGE
+
+`frolic-react` provides multiple chart types for your dashboards. Refer to `frolic-react` [documentation](https://www.frolicorg.com/frolic-react/docs) to learn about different types of chart `frolic-react` supports.
+
+Note that we have been using sample data for our chart so far. Let's connect our chart to the database data.
+
+## Database Integration
+
+To fetch the data from the database for our dashboard component, we will use [Frolic](https://www.frolicorg.com) backed service which makes it easy to fetch data from database to the UI with the help of APIs.
+
+### Clone Frolic
+
+To setup Frolic locally, we first need to clone the project
+
+```bash showLineNumbers
+git clone https://github.com/frolicorg/frolic.git
+```
+
+### Configure your Database
+
+After the project is cloned, we need to configure the project to connect to our database by adding our database configurations.
+
+Database can be configured in [config.toml](https://www.frolicorg.com/docs/getting-started/app-configurations) file of the cloned repository.
+
+```toml {2-7} showLineNumbers
+[database]
+db_type = "mysql"
+db_host = "thinkbricks-db.ct00o317q97i.us-east-1.rds.amazonaws.com"
+db_port = 3306
+db_name = "ecommerce_sample"
+db_user = "admin"
+db_password = "password"
+```
+
+If you are using a database other than MySQL, check the instructions to setup on [frolic documentation](https://www.frolicorg.com/docs/getting-started/app-configurations).
+
+### Run Frolic Backend Service
+
+To run frolic backend service, we will can use [Docker](http://docker.com) to build and run the application:
+
+```bash showLineNumbers
+docker-compose up --build
+```
+
+When the docker build is completed and running, you will be able to query the data using `/api` endpoint from the frolic server.
+
+We can query the data from Frolic through a POST request:
+
+```bash {4-14} showLineNumbers
+curl --location 'http://localhost/api' \
+--header 'Content-Type: application/json' \
+--data '{
+      "metrics": [
+        {
+          "field": "products.price",
+          "aggregate_operator": "sum"
+        }
+      ],
+      "dimensions": [
+        {
+          "field": "products.category"
+        }
+      ]
+}'
+```
+
+We can specify which `metrics` we want to obtain from our tables by mentioning the field in `<table_name>.<column_name>` format. When we want to categorise the metrics using through another field, we can use `dimensions` attribute to specify the field by which we want to categorise. For more information on the API specifications checkout [frolic documentation](https://www.frolicorg.com/docs/api-reference).
+
+The above query will return the response in this format:
+
+```js showLineNumbers
+{
+    "data": [
+        {
+            "products.category": "Gizmo", // dimension
+            "products.price": 51 // metric
+        },
+        {
+            "products.category": "Doohickey",
+            "products.price": 42
+        }
+    ]
+}
+```
+
+We can use this API to fetch any metrics we need to display in the front end components.
+
+### Use Database Data in our UI
+
+We can now use Frolic backend service to fetch the data from our database through an API call. Add the highlighted code below to fetch the data from the database.
+
+```js {3-4, 12-34} showLineNumbers
+"use client"
+import { Card, LineChart, BarChart } from 'frolic-react'
+import { FrolicResponse, getData } from 'frolic-react'
+import { useEffect, useState } from 'react';
+
+const Page = () => {
+  const data = [
+    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 }
+  ];
+
+  const [apiResponse, setApiResponse] = useState<FrolicResponse>();
+
+  useEffect(() => {
+    async function fetchData(){
+      const data = await getData(apiUrl, {
+          "metrics": [
+              {
+                  "field": "products.price",
+                  "aggregate_operator": "sum"
+              },
+          ],
+          "dimensions": [
+              {
+                  "field": "products.category",
+              },
+          ],
+      });
+
+      setApiResponse(data);
+    }
+
+    fetchData();
+  }, []);
+
+  return (
+    <div className="grid grid-cols-2 gap-5">
+      <Card title="Line Chart">
+        <LineChart data={data} metrics={["uv", "pv", "amt"]} dimensions={["name"]}></LineChart>
+      </Card>
+    </div>
+  );
+};
+
+export default Page;
+```
+
+Update the `<LineChart>` parameters to use display the coming from frolic backend.
+
+```js {39} showLineNumbers
+"use client"
+import { Card, LineChart, BarChart } from 'frolic-react'
+import { FrolicResponse, getData } from 'frolic-react'
+import { useEffect, useState } from 'react';
+
+const Page = () => {
+  const data = [
+    { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 }
+  ];
+
+  const [apiResponse, setApiResponse] = useState<FrolicResponse>();
+
+    useEffect(() => {
+      async function fetchData(){
+        const data = await getData(apiUrl, {
+            "metrics": [
+                {
+                    "field": "products.price",
+                    "aggregate_operator": "sum"
+                },
+            ],
+            "dimensions": [
+                {
+                    "field": "products.category",
+                },
+            ],
+        });
+
+        setApiResponse(data);
+      }
+
+      fetchData();
+    }, []);
+
+  return (
+    <div className="grid grid-cols-2 gap-5">
+      <Card title="Line Chart">
+        <LineChart data={apiResponse.data} metrics={["products.price"]} dimensions={["products.category"]}></LineChart>
+      </Card>
+    </div>
+  );
+};
+
+export default Page;
+```
+
+The data displayed in your dashboard will now be coming from your database.
+
+If you have any feedback or questions regarding this tutorial, ask us on our [Discord](https://discord.gg/NA9nkZaQnv) server.

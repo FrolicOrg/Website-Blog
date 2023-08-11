@@ -1,7 +1,7 @@
 ---
-name: Frolic
-avatar: /static/images/avatar.png
-occupation: CEO
+name: Arihant Parsoya
+avatar: /static/images/arihant_avatar.png
+occupation: Founder
 company: Frolic
 email: parsoyaarihant@gmail.com
 twitter: https://twitter.com/FrolicOrg
@@ -9,4 +9,4 @@ linkedin: https://www.linkedin.com/company/frolicorg
 github: https://github.com/frolicorg
 ---
 
-Frolic is an open source developer tool.
+Arihant is the co-founder of Frolic.
