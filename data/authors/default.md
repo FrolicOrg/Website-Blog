@@ -1,6 +1,6 @@
 ---
 name: Frolic
-avatar: /blog/static/images/avatar.png
+avatar: /blog/static/images/default_avatar.png
 occupation: CEO
 company: Frolic
 email: parsoyaarihant@gmail.com
