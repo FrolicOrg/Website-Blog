@@ -1,6 +1,6 @@
 ---
 name: Arihant Parsoya
-avatar: /static/images/arihant_avatar.png
+avatar: /blog/static/images/arihant_avatar.png
 occupation: Founder
 company: Frolic
 email: parsoyaarihant@gmail.com
