@@ -47,7 +47,7 @@ After `frolic-react` is installed, you can add the first chart to your webpage b
 
 ```js {2} showLineNumbers
 'use client'
-import { Card, LineChart, BarChart } from 'frolic-react'
+import { Card, BarChart } from 'frolic-react'
 
 const Page = () => {
   return <div></div>
@@ -58,14 +58,15 @@ export default Page
 
 Let's add sample data which will be displayed by our charts
 
-```js {5-8} showLineNumbers
+```js {5-9} showLineNumbers
 'use client'
-import { Card, LineChart, BarChart } from 'frolic-react'
+import { Card, BarChart } from 'frolic-react'
 
 const Page = () => {
   const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
     { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+    { name: 'Page C', uv: 3000, pv: 2498, amt: 3210 },
   ]
 
   return <div></div>
@@ -74,22 +75,23 @@ const Page = () => {
 export default Page
 ```
 
-Display the sample data using `<LineChart>` component in `frolic-react`:
+Display the sample data using `<BarChart>` component in `frolic-react`:
 
-```js {11-15} showLineNumbers
+```js {12-16} showLineNumbers
 'use client'
-import { Card, LineChart, BarChart } from 'frolic-react'
+import { Card, BarChart } from 'frolic-react'
 
 const Page = () => {
   const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
     { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+    { name: 'Page C', uv: 3000, pv: 2498, amt: 3210 },
   ]
 
   return (
     <div className="grid grid-cols-2 gap-5">
       <Card title="Line Chart">
-        <LineChart data={data} metrics={['uv', 'pv', 'amt']} dimensions={['name']}></LineChart>
+        <BarChart data={data} metrics={['uv', 'pv', 'amt']} dimensions={['name']}></BarChart>
       </Card>
     </div>
   )
@@ -100,7 +102,7 @@ export default Page
 
 You should be able to see the following on your webpage:
 
-IMAGE
+![Bar Chart](/static/blog/frolic-tutorial-chart.png)
 
 `frolic-react` provides multiple chart types for your dashboards. Refer to `frolic-react` [documentation](https://www.frolicorg.com/frolic-react/docs) to learn about different types of chart `frolic-react` supports.
 
@@ -193,14 +195,15 @@ We can now use Frolic backend service to fetch the data from our database throug
 
 ```js {3-4, 12-34} showLineNumbers
 "use client"
-import { Card, LineChart, BarChart } from 'frolic-react'
+import { Card, BarChart } from 'frolic-react'
 import { FrolicResponse, getData } from 'frolic-react'
 import { useEffect, useState } from 'react';
 
 const Page = () => {
   const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 }
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+    { name: 'Page C', uv: 3000, pv: 2498, amt: 3210 }
   ];
 
   const [apiResponse, setApiResponse] = useState<FrolicResponse>();
@@ -230,7 +233,7 @@ const Page = () => {
   return (
     <div className="grid grid-cols-2 gap-5">
       <Card title="Line Chart">
-        <LineChart data={data} metrics={["uv", "pv", "amt"]} dimensions={["name"]}></LineChart>
+        <BarChart data={data} metrics={["uv", "pv", "amt"]} dimensions={["name"]}></BarChart>
       </Card>
     </div>
   );
@@ -239,18 +242,19 @@ const Page = () => {
 export default Page;
 ```
 
-Update the `<LineChart>` parameters to use display the coming from frolic backend.
+Update the `<BarChart>` parameters to use display the coming from frolic backend.
 
 ```js {39} showLineNumbers
 "use client"
-import { Card, LineChart, BarChart } from 'frolic-react'
+import { Card, BarChart } from 'frolic-react'
 import { FrolicResponse, getData } from 'frolic-react'
 import { useEffect, useState } from 'react';
 
 const Page = () => {
   const data = [
     { name: 'Page A', uv: 4000, pv: 2400, amt: 2400 },
-    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 }
+    { name: 'Page B', uv: 3000, pv: 1398, amt: 2210 },
+    { name: 'Page C', uv: 3000, pv: 2498, amt: 3210 }
   ];
 
   const [apiResponse, setApiResponse] = useState<FrolicResponse>();
@@ -280,7 +284,7 @@ const Page = () => {
   return (
     <div className="grid grid-cols-2 gap-5">
       <Card title="Line Chart">
-        <LineChart data={apiResponse.data} metrics={["products.price"]} dimensions={["products.category"]}></LineChart>
+        <BarChart data={apiResponse?.data!} metrics={["products.price"]} dimensions={["products.category"]}></BarChart>
       </Card>
     </div>
   );
@@ -291,4 +295,6 @@ export default Page;
 
 The data displayed in your dashboard will now be coming from your database.
 
-If you have any feedback or questions regarding this tutorial, ask us on our [Discord](https://discord.gg/NA9nkZaQnv) server.
+![Bar Chart](/static/blog/frolic-tutorial-chart-final.png)
+
+Congratulations! you have successfully added dashboard to your application. If you have any feedback or questions regarding this tutorial, ask us on our [Discord](https://discord.gg/NA9nkZaQnv) server.

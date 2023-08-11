@@ -5,7 +5,8 @@ import Umami from './Umami'
 import Posthog from './Posthog'
 import siteMetadata from '@/data/siteMetadata'
 
-const isProduction = process.env.NODE_ENV === 'production'
+// const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = true
 
 const Analytics = () => {
   return (
