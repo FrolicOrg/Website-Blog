@@ -1,5 +1,5 @@
 const siteMetadata = {
-  title: 'Frolic',
+  title: 'Frolic Blog',
   author: 'Frolic',
   headerTitle: 'Frolic Blog',
   description: 'Learn about latest development in field of Analytics and AI',
