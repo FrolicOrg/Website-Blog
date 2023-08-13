@@ -28,7 +28,7 @@ To illustrate the tangible effects of indexing on data performance, we conducted
 
 ### Setting Up the Experiment
 
-1. **Creating the Database:** Our experiment began by establishing a database in MySQL. We sourced our data from a CSV file (you can access the file [here](link_to_csv_file)) and populated the database with this information.
+1. **Creating the Database:** Our experiment began by establishing a database in MySQL. We sourced our data from a CSV file (you can access the file [here](/static/blog/database-performance-practical-guide/data.csv)) and populated the database with this information.
 
 2. **Duplicating Data:** To simulate the effects of increasing dataset sizes, we duplicated the database using the SQL command: `INSERT INTO data SELECT * FROM data;`. We continued this process until we reached a dataset size of approximately 190,000 rows—this marked the threshold where differences in query time became noticeable.
 
