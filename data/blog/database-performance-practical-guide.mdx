@@ -1,12 +1,12 @@
 ---
-title: 'Data Performance : Practical Guide to Impact of Indexing'
+title: 'Database Performance : Practical Guide to Impact of Indexing'
 date: 2023-08-13T00:00:00Z
 lastmod: '2023-08-13'
 tags:
   [
     'database',
-    'data performance',
-    'data indexing',
+    'database performance',
+    'database indexing',
     'indexing in mysql',
     'indexing impact',
     'database query time',
@@ -14,7 +14,7 @@ tags:
   ]
 draft: false
 summary: 'See the impact on Indexing via a Practical Experiment'
-images: ['/blog/static/blog/data-performance-practical-guide/cover.png']
+images: ['/blog/static/blog/database-performance-practical-guide/cover.png']
 # layout: PostSimple
 # bibliography: references-data.bib
 # canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
@@ -48,7 +48,7 @@ To illustrate the tangible effects of indexing on data performance, we conducted
 
 The focal point of our experiment was a simple query: `SELECT COUNT(*) FROM data WHERE date = '1997-01-28';` We ran this query on the original database, the non-indexed duplicated database, and the indexed duplicated database. The goal was to measure the time taken for each query.
 
-![Results](/blog/static/blog/data-performance-practical-guide/cover.png)
+![Results](/blog/static/blog/database-performance-practical-guide/cover.png)
 
 ### Observations
 
