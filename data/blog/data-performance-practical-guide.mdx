@@ -1,0 +1,63 @@
+---
+title: 'Data Performance : Practical Guide to Impact of Indexing'
+date: 2023-08-13T00:00:00Z
+lastmod: '2023-08-13'
+tags:
+  [
+    'database',
+    'data performance',
+    'data indexing',
+    'indexing in mysql',
+    'indexing impact',
+    'database query time',
+    'database performance',
+  ]
+draft: false
+summary: 'See the impact on Indexing via a Practical Experiment'
+images: ['/blog/static/blog/data-performance-practical-guide/cover.png']
+# layout: PostSimple
+# bibliography: references-data.bib
+# canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
+---
+
+## Introduction: Optimizing Data Performance
+
+In the realm of data management, optimizing data performance is a multifaceted challenge. As datasets grow larger and more complex, ensuring efficient data retrieval and manipulation becomes paramount. There are various strategies and techniques available to enhance data performance, and in this blog, we will focus on one crucial aspect: indexing.
+
+## Understanding Indexing in Databases
+
+Before we dive into the impact of indexing on data performance, let's take a moment to understand what indexing entails. Indexing is a data structure technique used to quickly locate and access specific data within databases. It works much like an index in a book, enabling rapid navigation to relevant information. By creating an organized reference to data entries, indexing reduces the time and computational effort required for querying large datasets.
+
+For a more comprehensive understanding of indexing in databases, you can explore the detailed theory provided by GeeksforGeeks: [Indexing in Databases: GeeksforGeeks](https://www.geeksforgeeks.org/indexing-in-databases-set-1/).
+
+## The Experiment: Measuring the Impact of Indexing on Query Performance
+
+To illustrate the tangible effects of indexing on data performance, we conducted an experiment that demonstrates how indexing can influence query time and efficiency as dataset sizes increase.
+
+### Setting Up the Experiment
+
+1. **Creating the Database:** Our experiment began by establishing a database in MySQL. We sourced our data from a CSV file (you can access the file [here](link_to_csv_file)) and populated the database with this information.
+
+2. **Duplicating Data:** To simulate the effects of increasing dataset sizes, we duplicated the database using the SQL command: `INSERT INTO data SELECT * FROM data;`. We continued this process until we reached a dataset size of approximately 190,000 rows—this marked the threshold where differences in query time became noticeable.
+
+3. **Creating Duplicate Database:** We also created a duplicate of the database using the SQL command: `CREATE TABLE duplicated_table AS SELECT * FROM data;`.
+
+4. **Adding Index:** To one of the duplicated databases, we added an index using the command: `CREATE INDEX idx_date ON duplicated_table (date);`
+
+### The Query and Observations
+
+The focal point of our experiment was a simple query: `SELECT COUNT(*) FROM data WHERE date = '1997-01-28';` We ran this query on the original database, the non-indexed duplicated database, and the indexed duplicated database. The goal was to measure the time taken for each query.
+
+![Results](/blog/static/blog/data-performance-practical-guide/cover.png)
+
+### Observations
+
+1. **Impact of Indexing on Duplicated Data:** One striking observation was that duplicating the indexed table took significantly more time compared to duplicating the non-indexed table. This difference can be attributed to the fact that the indexed table needed to create an index for each new row, resulting in additional overhead.
+
+2. **Query Time with and without Indexing:** As the dataset size grew, the query time increased significantly for the non-indexed table. However, with proper indexing, there was almost no change in query time, even as the dataset expanded.
+
+## Conclusion
+
+Our experiment provides a practical demonstration of how indexing can dramatically enhance data performance. By effectively implementing indexing, you can ensure that querying remains efficient as your data grows. This technique minimizes the time complexity associated with data retrieval and is a vital tool in the database optimization toolkit.
+
+As you navigate the world of data management, remember that thoughtful indexing strategies can be your allies in achieving optimal performance, no matter the scale of your data.
