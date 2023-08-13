@@ -5,7 +5,7 @@ const siteMetadata = {
   description: 'Learn about latest development in field of Analytics and AI',
   language: 'en-us',
   theme: 'system', // system, dark or light
-  siteUrl: 'https://www.frolicorg.com/blog',
+  siteUrl: 'https://www.frolicorg.com',
   siteRepo: 'https://github.com/frolicorg',
   siteLogo: '/static/images/logo.png',
   image: '/static/images/avatar.png',
