@@ -1,0 +1,28 @@
+---
+title: 'API Performance - Using Caching and Pre-Computation'
+date: 2023-08-15T00:00:00Z
+lastmod: '2023-08-15'
+tags: ['api', 'system design', 'caching']
+draft: false
+summary: 'Understand what Caching & Pre-Computation mean and why are they used'
+images: ['/blog/static/blog/api-performance-caching-and-precompute/cover-caching.png']
+# layout: PostSimple
+# bibliography: references-data.bib
+# canonicalUrl: https://tailwind-nextjs-starter-blog.vercel.app/blog/new-features-in-v1/
+---
+
+# API Performance: Using Caching and Pre-Computation
+
+When building APIs for the purpose of Analytics, performance is always a critical aspect. In this blog, I am going to share two techniques that will help improve performance drastically. These techniques not only reduce response time for your APIs but also make your database load healthier. Every improvement comes with a cost, but in this case, the benefits will definitely outweigh the costs. In simple terms, these techniques are like retail stores where customers can quickly get anything they need, instead of going to the manufacturing unit every time. This reduces the time for customers and the manufacturing unit can ship out in bulk, resulting in lesser load to ship. The cost would be setting up those retail stores.
+
+Now, let's delve into these techniques:
+
+## Caching
+
+Caching involves storing the request and response in memory. When the same request comes again, we check if the response for this request exists in our memory. If it does, we use that cached response instead of going to the database. However, it's important to keep track of database updates. If the database has been updated, we need to fetch the updated response from the database. Caching responses usually take around 100ms, while your API response time could vary significantly depending on the database and the actual query.
+![Results](/blog/static/blog/api-performance-caching-and-precompute/caching.png)
+
+## Pre-Compute
+
+Pre-computation is similar to caching but more powerful. Let's use an example to explain this. Consider an e-commerce business with a dashboard where sellers can see the number of orders placed for their products. Caching might not be very helpful here since each time a different user accesses the dashboard, the request is different. Instead, what we can do is compute the number of orders for each seller from the database and store that in our memory. Now, when any seller accesses the dashboard, we can use the data from memory without hitting the database. This approach caters to numerous requests by performing just one database request.
+![Results](/blog/static/blog/api-performance-caching-and-precompute/cover-caching.png)
